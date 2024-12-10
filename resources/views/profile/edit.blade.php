@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('content')
     <div class="row g-4">
+        @if (session('status'))
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                {{ session('status') }} successfully
+            </div>
+        @endif
         {{-- Update Profile Information --}}
         <div class="col-md-12">
             <div class="card">
