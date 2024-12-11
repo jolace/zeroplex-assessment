@@ -102,7 +102,12 @@ document.addEventListener("DOMContentLoaded", function()
     function getDataAndShowEditModal(id)
     {
         fetch('/task/'+id)
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    return Promise.reject(response.statusText);
+                }
+                return response.json();
+            })
             .then((response) => {
                 taskForm.setAttribute('data-form-type', 'edit');
                 taskForm.setAttribute('data-task-id', id);
@@ -114,6 +119,8 @@ document.addEventListener("DOMContentLoaded", function()
                 document.getElementById('taskDueDate').value = data.due_date;
                 document.getElementById('taskStatus').value = data.status;
                 modal.show();
+            }).catch((error) => {
+                notyf.error(error);
             })
     }
 
@@ -134,16 +141,29 @@ document.addEventListener("DOMContentLoaded", function()
                 taskTable.paginate(1);
                 deleteModal.hide();
             } else {
-                notyf.error('An unexpected error occurred.');
+                return Promise.reject(response.statusText);
             }
+        }).catch((error) => {
+            notyf.error(error);
         });
     })
 
     // show modal for task details
     function getDataAndShowTaskDetailsModal(id)
     {
-        fetch('/task/'+id)
-            .then((response) => response.json())
+        fetch('/task/'+id,
+            {
+                headers: {
+                    'Accept' : 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    return Promise.reject(response.statusText);
+                }
+                return response.json();
+            })
             .then((response) => {
                 let data = response.data;
                 let taskStatus =  document.getElementById("task-status");
@@ -171,6 +191,8 @@ document.addEventListener("DOMContentLoaded", function()
                 });
                 document.getElementById('add-comment').setAttribute('data-task-id',id);
                 showModal.show();
+            }).catch((error) => {
+                notyf.error(error);
             })
     }
     
@@ -209,8 +231,14 @@ document.addEventListener("DOMContentLoaded", function()
             .then((response) => {
                 if (response.data) {
                     let newComment = createComment(response.data);
-                    document.getElementById('task-comments-list').prepend(newComment);
+                    let taskCommentList = document.getElementById('task-comments-list');
+                    if(taskCommentList.children.length < 1)
+                    {
+                        taskCommentList.innerHTML = '';
+                    }
+                    taskCommentList.prepend(newComment);
                     notyf.success('Your comment has been added successfully!');
+                    document.getElementById('comment-text').value = '';
                 } else {
                     let commentText = document.getElementById('comment-text');
                     if (commentText && !commentText.classList.contains('is-invalid')) {

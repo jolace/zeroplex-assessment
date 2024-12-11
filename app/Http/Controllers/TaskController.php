@@ -9,6 +9,8 @@ use App\Models\Task;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class TaskController extends Controller
 {
@@ -24,7 +26,7 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->taskService->dataTableOutput($request->all());
+        return $this->taskService->dataTableOutput($request->all(), Auth::user());
     }
 
     /**
@@ -50,6 +52,7 @@ class TaskController extends Controller
      */
     public function show(Task $task): TaskResource
     {
+        Gate::authorize('view', $task);
         $task = $task->load('comments.user');
 
         return TaskResource::make($task);
@@ -65,6 +68,7 @@ class TaskController extends Controller
      */
     public function update(TaskUpdateRequest $request, Task $task): TaskResource
     {
+        Gate::authorize('update', $task);
         $task = $this->taskService->update($task, $request->all());
 
         return TaskResource::make($task);
@@ -79,7 +83,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task): Response
     {
-
+        Gate::authorize('delete', $task);
         if ($this->taskService->delete($task)) {
             return response(null, 204);
         }
