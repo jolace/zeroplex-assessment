@@ -21,3 +21,15 @@
 {
     margin-left: 20px;
 }
+.scrollable-list {
+    max-height: calc(90vh - 500px);
+    overflow-y: auto;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+}
+.modal-dialog {
+    max-height: 95vh;
+    overflow-y: auto;
+}

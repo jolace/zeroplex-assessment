@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function()
     // Remove, Edit or Show task modal 
     document.body.addEventListener( 'click', function ( event ) {
         let classes = event.target.className.split(' ');
-        console.log(classes);
         if( classes.includes('edit-task') ) {
             getDataAndShowEditModal(event.target.getAttribute('data-edit-id'));
         };
@@ -44,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function()
             
             const formData = new FormData(taskForm);
             const data = Object.fromEntries(formData.entries());
-            console.log(isEdit,isEdit == 'edit');
             const url = isEdit == 'edit' ? `/task/${taskForm.dataset.taskId}` : '/task';
             const method = isEdit== 'edit' ? 'PUT' : 'POST';
             
@@ -130,7 +128,6 @@ document.addEventListener("DOMContentLoaded", function()
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
         }).then(response => {
-            console.log(response.status);
             if(response.ok)
             {
                 notyf.success('Deleted successfully');
@@ -154,7 +151,6 @@ document.addEventListener("DOMContentLoaded", function()
                 document.getElementById("taskDetailsModalLabel").textContent = data.title;
                 document.getElementById("task-description").textContent = data.description;
                 document.getElementById("task-due-date").textContent =  new Date(data.due_date).toLocaleDateString('en-US');
-                console.log(data.status, data);
                 const statusDisplay = {
                     'to_do' : 'To do',
                     'in_progress' : 'In Progress',
@@ -164,6 +160,16 @@ document.addEventListener("DOMContentLoaded", function()
                 taskStatus.textContent = taskDisplayStatus;
                 taskStatus.classList.add('badge');
                 taskStatus.classList.add('badge-'+statusMap[taskDisplayStatus]);
+                if(data.comments.length < 1)
+                {
+                    document.getElementById('task-comments-list').textContent = "No comments yet.";
+                }
+                Object.entries(data.comments).reverse().forEach((entry) => {
+                    const [key, value] = entry;
+                    let newComment = createComment(value);
+                    document.getElementById('task-comments-list').appendChild(newComment);
+                });
+                document.getElementById('add-comment').setAttribute('data-task-id',id);
                 showModal.show();
             })
     }
@@ -185,4 +191,73 @@ document.addEventListener("DOMContentLoaded", function()
         taskTable.config.ajaxParams.status = document.getElementById('status').value;
         taskTable.paginate(1);
     })
+
+    // add comment
+    document.getElementById('add-comment').addEventListener('click', function(event){
+        let taskId = event.target.dataset.taskId;
+        clearCommentValidation();
+        fetch('/task/'+taskId+'/comment', {
+                method: 'POST',
+                headers: {
+                    'Accept' : 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({'comment' : document.getElementById('comment-text').value})
+            })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.data) {
+                    let newComment = createComment(response.data);
+                    document.getElementById('task-comments-list').prepend(newComment);
+                    notyf.success('Your comment has been added successfully!');
+                } else {
+                    let commentText = document.getElementById('comment-text');
+                    if (commentText && !commentText.classList.contains('is-invalid')) {
+                        commentText.classList.add('is-invalid');
+                        commentText.nextElementSibling.textContent = response.errors.comment[0];
+                    }
+                }
+            })
+    });
+    // reset validation when show modal is closed
+    document.getElementById('taskDetailsModal').addEventListener('hidden.bs.modal', function () {
+        clearCommentValidation();
+        clearComments();
+    });
+
+    function clearComments()
+    {
+        document.getElementById('task-comments-list').textContent = '';
+    }
+
+    function clearCommentValidation()
+    {
+        let commentText = document.getElementById('comment-text');
+        if (commentText && commentText.classList.contains('is-invalid')) {
+            commentText.classList.remove('is-invalid');
+            commentText.nextElementSibling.textContent = '';
+        }
+    }
+
+    function createComment(value)
+    {
+        const commentItem = document.createElement('li');
+        commentItem.className = 'list-group-item';
+
+        const strong = document.createElement('strong');
+        strong.textContent = value.user.name;
+        commentItem.appendChild(strong);
+
+        const small = document.createElement('small');
+        small.className = 'text-muted';
+        small.textContent = `(${new Date(value.created_at).toLocaleString()})`;
+        commentItem.appendChild(small);
+
+        const paragraph = document.createElement('p');
+        paragraph.textContent = value.comment;
+        commentItem.appendChild(paragraph);
+
+        return commentItem;
+    }
 });

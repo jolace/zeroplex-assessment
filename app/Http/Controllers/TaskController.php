@@ -50,6 +50,8 @@ class TaskController extends Controller
      */
     public function show(Task $task): TaskResource
     {
+        $task = $task->load('comments.user');
+
         return TaskResource::make($task);
     }
 

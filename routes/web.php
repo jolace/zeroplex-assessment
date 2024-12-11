@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
@@ -11,6 +12,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::Resource('task', TaskController::class)->except(['create','edit']);
+    Route::Resource('task.comment', CommentController::class)->only(['store']);
 });
 
 require __DIR__.'/auth.php';
