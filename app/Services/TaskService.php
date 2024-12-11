@@ -4,12 +4,8 @@ namespace App\Services;
 
 use App\Models\Comment;
 use App\Models\Task;
-use Illuminate\Database\Eloquent\MissingAttributeException;
-use Illuminate\Database\Eloquent\InvalidCastException;
-use Illuminate\Database\Eloquent\JsonEncodingException;
-use Illuminate\Contracts\Encryption\EncryptException;
+use App\Models\User;
 use Illuminate\Support\Collection;
-use RuntimeException;
 
 class TaskService
 {
@@ -76,7 +72,7 @@ class TaskService
      *
      * @return array
      */
-    public function dataTableOutput(array $parameters): array
+    public function dataTableOutput(array $parameters, User $user): array
     {
 
         $tasks = Task::query();
@@ -87,6 +83,11 @@ class TaskService
 
         if (! empty($parameters['status'])) {
             $tasks = $tasks->where('status', $parameters['status']);
+        }
+
+        if(!$user->hasRole('Admin'))
+        {
+            $tasks = $tasks->where('user_id', $user->id);
         }
 
         $recordsTotal = $tasks->count();
