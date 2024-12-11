@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'Task Manager') }}</title>
-        <link  rel="stylesheet" type="text/css" href="{{URL::to('/bootstrap/css/bootstrap.min.css')}}"/>
-        <link  rel="stylesheet" type="text/css" href="{{URL::to('/custom.css')}}"/>
-        <script src="{{URL::to('/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        @include('layouts.head')
     </head>
-    <body>
-        <div class="col-lg-8 mx-auto p-3 py-md-5">
+    <body class="d-flex flex-column min-vh-100">
+        <div class="col-lg-8 mx-auto p-3 py-md-5 flex-grow-1">
             @include('layouts.navigation')
             <main>
                 <div class="row g-5">
@@ -19,9 +13,9 @@
                     </div>
                 </div>
             </main>
-            <footer class="pt-5 my-5 text-muted border-top">
-                Zeroplex Assessment - Aleksandar Jolakoski Dec 2024
-            </footer>
         </div>
-    </body>
+        <footer class="pt-5 my-5 text-muted border-top text-center">
+            Zeroplex Assessment - Aleksandar Jolakoski Dec 2024
+        </footer>
+</body>
 </html>
