@@ -2,8 +2,14 @@
 
 namespace App\Services;
 
+use App\Models\Comment;
 use App\Models\Task;
+use Illuminate\Database\Eloquent\MissingAttributeException;
+use Illuminate\Database\Eloquent\InvalidCastException;
+use Illuminate\Database\Eloquent\JsonEncodingException;
+use Illuminate\Contracts\Encryption\EncryptException;
 use Illuminate\Support\Collection;
+use RuntimeException;
 
 class TaskService
 {
@@ -48,6 +54,21 @@ class TaskService
     public function delete(Task $task): bool
     {
         return $task->delete();
+    }
+
+    /**
+     * @param \App\Models\Task $task
+     * @param array $data
+     *
+     * @return \App\Models\Comment
+     */
+    public function insertComment(Task $task, array $data): Comment
+    {
+        $comment = new Comment;
+        $comment->comment = $data['comment'];
+        $comment = $task->comments()->save($comment);
+
+        return $comment;
     }
 
     /**

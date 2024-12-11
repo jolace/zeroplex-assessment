@@ -25,6 +25,7 @@ class TaskResource extends JsonResource
             'description' => $task->description,
             'due_date' => $task->due_date,
             'status' => $task->status,
+            'comments' => CommentResource::collection($this->whenLoaded('comments')),
         ];
     }
 }

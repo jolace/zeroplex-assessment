@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
  * @property \App\Enums\Task\StatusEnum $status
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
+ * @method \Illuminate\Database\Eloquent\Relations\BelongsTo user()
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany comments()
  */
 class Task extends Model
 {
@@ -30,5 +32,15 @@ class Task extends Model
                 $task->user_id = Auth::id();
             }
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

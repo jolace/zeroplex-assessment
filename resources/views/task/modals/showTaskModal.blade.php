@@ -16,6 +16,18 @@
                     </p>
                 </div>
                 <hr>
+                <h5>Task Comments</h5>
+                <hr>
+                <ul id="task-comments-list" class="list-group mb-3 scrollable-list"></ul>
+                <div class="mb-3">
+                    <label for="comment-text" class="form-label">Add a Comment</label>
+                    <textarea class="form-control" id="comment-text" rows="3" required></textarea>
+                    <div class="invalid-feedback"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="add-comment">Add Comment</button>
+                </div>
             </div>
         </div>
     </div>
