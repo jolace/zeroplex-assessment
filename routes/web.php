@@ -11,7 +11,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::Resource('task', TaskController::class)->except(['create','edit']);
+    Route::Resource('task', TaskController::class)->except(['create', 'edit']);
     Route::Resource('task.comment', CommentController::class)->only(['store']);
 });
 

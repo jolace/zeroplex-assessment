@@ -10,6 +10,8 @@ class CommentResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -21,7 +23,7 @@ class CommentResource extends JsonResource
             'id' => $comment->id,
             'comment' => $comment->comment,
             'user' => UserResource::make($this->whenLoaded('user')),
-            'created_at' => $comment->created_at
+            'created_at' => $comment->created_at,
         ];
     }
 }

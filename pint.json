@@ -1,0 +1,24 @@
+{
+    "rules": {
+        "method_chaining_indentation":false,
+        "no_superfluous_phpdoc_tags": false,
+        "phpdoc_add_missing_param_annotation": {
+            "only_untyped": false
+        },
+        "phpdoc_param_order": true,
+        "phpdoc_trim": true,
+        "phpdoc_separation": {
+            "groups": [
+                [
+                    "param"
+                ],
+                [
+                    "return"
+                ]
+            ]
+        },
+        "phpdoc_align": {
+            "align": "left"
+        }
+    }
+}
