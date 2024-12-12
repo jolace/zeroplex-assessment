@@ -33,3 +33,11 @@
     max-height: 95vh;
     overflow-y: auto;
 }
+.actionButtons {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+.actionButtons a{
+    padding: 3px;
+}

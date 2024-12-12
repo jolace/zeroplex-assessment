@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Models\Task;
+use App\Notifications\TaskCommentAdded;
 use App\Services\TaskService;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -24,6 +26,10 @@ class CommentController extends Controller
     {
         $comment = $this->taskService->insertComment($task, $request->all());
         $comment->load('user');
+        if(Auth::user()->id != $task->user->id)
+        {
+            $task->user->notify(new TaskCommentAdded($comment));
+        }
 
         return CommentResource::make($comment);
     }
