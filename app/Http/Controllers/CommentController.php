@@ -11,23 +11,19 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function __construct(private TaskService $taskService)
-    {
-        
-    }
-    
+    public function __construct(private TaskService $taskService) {}
+
     /**
-     * @param \App\Models\Task $task 
+     * @param \App\Models\Task $task
      * @param \App\Http\Requests\CommentRequest $request
-     *  
-     * @return CommentResource 
+     *
+     * @return \App\Http\Resources\CommentResource
      */
     public function store(Task $task, CommentRequest $request): CommentResource
     {
         $comment = $this->taskService->insertComment($task, $request->all());
         $comment->load('user');
-        if(Auth::user()->id != $task->user->id)
-        {
+        if (Auth::user()->id != $task->user->id) {
             $task->user->notify(new TaskCommentAdded($comment));
         }
 

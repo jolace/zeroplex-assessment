@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
  * @property \App\Enums\Task\StatusEnum $status
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
+ *
  * @method \Illuminate\Database\Eloquent\Relations\BelongsTo user()
  * @method \Illuminate\Database\Eloquent\Relations\HasMany comments()
  */

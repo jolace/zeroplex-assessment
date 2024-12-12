@@ -69,6 +69,7 @@ class TaskService
 
     /**
      * @param array $parameters
+     * @param \App\Models\User $user
      *
      * @return array
      */
@@ -85,8 +86,7 @@ class TaskService
             $tasks = $tasks->where('status', $parameters['status']);
         }
 
-        if(!$user->hasRole('Admin'))
-        {
+        if (! $user->hasRole('Admin')) {
             $tasks = $tasks->where('user_id', $user->id);
         }
 
