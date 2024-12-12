@@ -11,25 +11,25 @@
                     <div class="mb-3">
                         <label for="taskTitle" class="form-label">Title</label>
                         <input type="text" class="form-control" 
-                               id="taskTitle" name="title" value="" requiredsdf>
+                               id="taskTitle" name="title" value="">
                         <div class="invalid-feedback"></div>
                     </div>
                     <div class="mb-3">
                         <label for="taskDescription" class="form-label">Description</label>
                         <textarea class="form-control" 
-                                  id="taskDescription" name="description" rows="3" requiredsdf></textarea>
+                                  id="taskDescription" name="description" rows="3"></textarea>
                         <div class="invalid-feedback"></div>
                     </div>
                     <div class="mb-3">
                         <label for="taskDueDate" class="form-label">Due Date</label>
                         <input type="date" class="form-control" 
-                               id="taskDueDate" name="due_date" value="" requiredsdf>
+                               id="taskDueDate" name="due_date" value="">
                         <div class="invalid-feedback"></div>
                     </div>
                     <div id="taskStatusDiv" class="mb-3">
                         <label for="taskStatus" class="form-label">Status</label>
                         <select class="form-select" 
-                                id="taskStatus" name="status" requiredsdf>
+                                id="taskStatus" name="status">
                             <option value="">Select Status</option>
                             @foreach($statusFilter  as $status)
                                 <option value="{{$status->value}}">{{$status->label()}}</option>

@@ -12,6 +12,13 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $user->assignRole('Regular User');
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *

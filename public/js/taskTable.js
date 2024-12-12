@@ -56,6 +56,7 @@ export function initializeTable() {
                 select: 4,
                 render: function (cell, idx) {                
                     let data = cell.innerHTML;
+                    let wrapper = '<div class="actionButtons">';
 
                     let showIcon = '<a title="Show">\
                     <i data-show-id="'+data+'" class="show-task fa-brands fa-readme fa-lg text-dark"></i></a>&nbsp';
@@ -66,7 +67,9 @@ export function initializeTable() {
                     let removeIcon = '<a title="Remove">\
                     <i data-remove-id="'+data+'" class="remove-task fas fa-trash-alt fa-lg text-warning"></i></a>';
 
-                    return showIcon+editIcon+removeIcon;
+                    wrapper += showIcon+editIcon+removeIcon+'</div>';
+
+                    return wrapper;
                 }
             }
         ],
